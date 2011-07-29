@@ -5,7 +5,7 @@ module Jasmine
     def go_to_twin(project_directory, filepath)
       other = twin(filepath)
       if File.file?(other)
-        %x{ "$TM_SUPPORT_PATH/bin/mate" "#{other}" }
+        %x{ "$TM_SUPPORT_PATH/bin/mate" "FILE NOT FOUND: #{other}" }
       else
         raise other
         # raise "HAAALP"
