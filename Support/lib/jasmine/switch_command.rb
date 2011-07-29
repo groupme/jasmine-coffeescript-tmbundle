@@ -7,7 +7,8 @@ module Jasmine
       if File.file?(other)
         %x{ "$TM_SUPPORT_PATH/bin/mate" "#{other}" }
       else
-        raise "NOT IMPLEMENTED"
+        raise other
+        # raise "HAAALP"
         # relative = other[project_directory.length+1..-1]
         # file_type = file_type(other)
         # if create?(relative, file_type)
@@ -24,17 +25,16 @@ module Jasmine
         case parent
           when 'app' then
             path = path.gsub(/\/app\//, "/spec/")
+            path = path.gsub(/\/coffeescripts\//, "/javascripts/")
             path = path.gsub(/\.coffee$/, "_spec.coffee")
           when 'spec' then
             path = path.gsub(/_spec\.coffee$/, ".coffee")
+            path = path.gsub(/\/javascripts\//, "/coffeescripts/")
             path = path.gsub(/\/spec\//, "/app/")
         end
         return path
       end
     end
-
-
-
 
 
     # NOT IMPLEMENTED (copied from RSpec.tmbundle)....................

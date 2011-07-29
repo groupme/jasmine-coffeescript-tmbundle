@@ -1,3 +1,7 @@
+This is a tweaked version of rsim's CoffeeScript bundle to work with Evergreen. See original and secondary README contents below. #)
+
+----
+
 This is a tweaked version Pivotal's original Jasmine bundle for JavaScript to work with CoffeeScript.  See original README contents below.
 
 ----
