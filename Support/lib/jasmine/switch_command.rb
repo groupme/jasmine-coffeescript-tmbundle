@@ -7,14 +7,11 @@ module Jasmine
       if File.file?(other)
         %x{ "$TM_SUPPORT_PATH/bin/mate" "#{other}" }
       else
-        raise "FILE NOT FOUND: #{other}"
-        # raise "HAAALP"
-        # relative = other[project_directory.length+1..-1]
-        # file_type = file_type(other)
-        # if create?(relative, file_type)
-        #   content = content_for(file_type, relative)
-        #   write_and_open(other, content)
-        # end
+        relative_path = other[project_directory.length+1..-1]
+        file_type = file_type(other)
+        if create?(relative_path, file_type)
+          write_and_open(other, "")
+        end
       end
     end
 
@@ -36,18 +33,14 @@ module Jasmine
       end
     end
 
-
-    # NOT IMPLEMENTED (copied from RSpec.tmbundle)....................
-
-
     def file_type(path)
-      if path =~ /^(.*?)\/(spec)\/(controllers|helpers|models|views)\/(.*?)$/
+      if path =~ /^(.*?)\/(spec\/javascripts)\/(controllers|helpers|models|views)\/(.*?)$/
         return "#{$3[0..-2]} spec"
       end
-      if path =~ /^(.*?)\/(app)\/(controllers|helpers|models|views)\/(.*?)$/
+      if path =~ /^(.*?)\/(app\/coffeescripts)\/(controllers|helpers|models|views)\/(.*?)$/
         return $3[0..-2]
       end
-      if path =~ /_spec\.rb$/
+      if path =~ /_spec\.coffee$/
         return "spec"
       end
       "file"
@@ -58,6 +51,17 @@ module Jasmine
       answer.to_s.chomp == "1"
     end
 
+    def write_and_open(path, content)
+      `mkdir -p "#{File.dirname(path)}"`
+      `touch "#{path}"`
+      `osascript &>/dev/null -e 'tell app "SystemUIServer" to activate' -e 'tell app "TextMate" to activate'`
+      `"$TM_SUPPORT_PATH/bin/mate" "#{path}"`
+      escaped_content = content.gsub("\n","\\n").gsub('$','\\$').gsub('"','\\\\\\\\\\\\"')
+      `osascript &>/dev/null -e "tell app \\"TextMate\\" to insert \\"#{escaped_content}\\" as snippet true"`
+    end
+
+    # NOT IMPLEMENTED (copied from rspec)
+
     def content_for(file_type, relative_path)
       case file_type
         when /spec$/ then
@@ -67,7 +71,6 @@ module Jasmine
       end
     end
 
-    # Extracts the snippet text
     def snippet(snippet_name)
       snippet_file = File.expand_path(File.dirname(__FILE__) + "/../../../../Snippets/#{snippet_name}")
       xml = File.open(snippet_file).read
@@ -103,15 +106,6 @@ SPEC
         lines[lines.length-(n+1)] = "#{indent}end"
       end
       lines.join("\n") + "\n"
-    end
-
-    def write_and_open(path, content)
-      `mkdir -p "#{File.dirname(path)}"`
-      `touch "#{path}"`
-      `osascript &>/dev/null -e 'tell app "SystemUIServer" to activate' -e 'tell app "TextMate" to activate'`
-      `"$TM_SUPPORT_PATH/bin/mate" "#{path}"`
-      escaped_content = content.gsub("\n","\\n").gsub('$','\\$').gsub('"','\\\\\\\\\\\\"')
-      `osascript &>/dev/null -e "tell app \\"TextMate\\" to insert \\"#{escaped_content}\\" as snippet true"`
     end
   end
 end
