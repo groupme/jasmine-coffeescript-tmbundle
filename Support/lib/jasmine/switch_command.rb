@@ -34,10 +34,10 @@ module Jasmine
     end
 
     def file_type(path)
-      if path =~ /^(.*?)\/(spec\/javascripts)\/(controllers|helpers|models|views)\/(.*?)$/
+      if path =~ /^(.*?)\/(spec\/javascripts)\/(controllers|helpers|models|views|routers)\/(.*?)$/
         return "#{$3[0..-2]} spec"
       end
-      if path =~ /^(.*?)\/(app\/coffeescripts)\/(controllers|helpers|models|views)\/(.*?)$/
+      if path =~ /^(.*?)\/(app\/coffeescripts)\/(controllers|helpers|models|views|routers)\/(.*?)$/
         return $3[0..-2]
       end
       if path =~ /_spec\.coffee$/
