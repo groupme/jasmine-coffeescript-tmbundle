@@ -5,9 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env sh
+	<string>#!/usr/bin/env bash
 
-open "http://localhost:8888/"</string>
+cat &lt;&lt;'RUBYEOF' &gt; /tmp/textmate-command-$$.rb
+
+require ENV['TM_BUNDLE_SUPPORT'] + "/lib/jasmine/run_focused"
+Jasmine::RunFocused.new.run STDOUT
+
+RUBYEOF
+
+${TM_RUBY:-ruby} /tmp/textmate-command-$$.rb; exit_status=$?; rm /tmp/textmate-command-$$.rb; exit $exit_status</string>
+	<key>fallbackInput</key>
+	<string>document</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
@@ -15,7 +24,7 @@ open "http://localhost:8888/"</string>
 	<key>name</key>
 	<string>Run Examples</string>
 	<key>output</key>
-	<string>showAsTooltip</string>
+	<string>showAsHTML</string>
 	<key>scope</key>
 	<string>source.coffee.jasmine</string>
 	<key>uuid</key>
