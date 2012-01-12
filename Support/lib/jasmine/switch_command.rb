@@ -26,8 +26,8 @@ module Jasmine
             path = path.gsub(/\.coffee$/, "_spec.coffee")
           when 'spec' then
             path = path.gsub(/_spec\.coffee$/, ".coffee")
-            path = path.gsub(/\/javascripts\//, "/coffeescripts/")
             path = path.gsub(/\/spec\//, "/app/")
+            path = path.gsub(/\/javascripts\//, "/coffeescripts/") unless File.file?(path)
         end
         return path
       end
