@@ -3,8 +3,15 @@ module Jasmine
     def run(stdout)
       require 'rubygems'
       require 'launchy'
-      relative_path = ENV['TM_FILEPATH'].split('javascripts/').last
-      Launchy.open("http://groupme.local:3000/evergreen/run/#{relative_path}")
+
+      if ENV["TM_FILEPATH"].match("experiences")
+        server = "http://experiences.groupme.local:9000"
+        relative_path = ENV['TM_FILEPATH'].split('assets/').last
+      else
+        server = "http://groupme.local:3000"
+        relative_path = ENV['TM_FILEPATH'].split('javascripts/').last
+      end
+      Launchy.open("#{server}/evergreen/run/#{relative_path}")
     end
   end
 end
